@@ -93,6 +93,8 @@ input, button {
         }
 
         update() {
+          const found = this.props.notes.find(note => note.id === this.props.match.params.id);
+          console.log(found);
           this.props.update({ text: this.state.text })
             .then(()=> this.props.history.push('/notes'));
         }
@@ -100,9 +102,6 @@ input, button {
         render() {
           const { text, loaded, error } = this.state;
           const { update } = this;
-          const { notes, match } = this.props;
-          const noteId = match.params.id;
-          const chosenNote = notes.find(note => note.id === noteId);
           return (
             <div>
               <form onSubmit={ev => ev.preventDefault()}>
@@ -177,7 +176,6 @@ input, button {
           this.setState({ notes : this.state.notes.map( note => note.id === updated.id ? updated : note)});
         }
         async create(note){
-          console.log(note);
           const created = (await axios.post(`${API}/users/${this.state.user.id}/notes`, note)).data;
           const notes = [...this.state.notes, created ];
           this.setState({ notes });
